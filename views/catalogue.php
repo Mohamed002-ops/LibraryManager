@@ -7,6 +7,24 @@ $categories = $query->fetchAll(PDO::FETCH_ASSOC);
 
 
 
+<?php
+$pdo = new PDO('mysql:host=localhost;dbname=bibliotheque;charset=utf8', 'root', '');
+$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+// Récupérer toutes les catégories
+$categories = $pdo->query("SELECT * FROM categories")->fetchAll(PDO::FETCH_ASSOC);
+
+// Récupérer les livres si une catégorie est sélectionnée
+$livres = [];
+if (isset($_GET['id_categorie'])) {
+  $stmt = $pdo->prepare("SELECT * FROM livres WHERE id_categorie = :id");
+  $stmt->execute([':id' => $_GET['id_categorie']]);
+  $livres = $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -80,33 +98,109 @@ $categories = $query->fetchAll(PDO::FETCH_ASSOC);
     <div class="container">
       <div class="header">
         <h2 class="title">Catalogue</h2>
-        <p class="subtitle">
+        <!-- <p class="subtitle">
           Simplifiez la gestion de votre bibliothèque grâce à
           notre plateforme moderne et intuitive.
           Library Manager vous permet de suivre les emprunts,
           gérer les collections, consulter les disponibilités et
           bien plus encore, le tout depuis une seule interface.
-        </p>
+        </p> -->
         <section class="catalogue">
           <div class="grid">
             <?php foreach ($categories as $cat): ?>
-              <div class="card" >
-                <img src="<?= htmlspecialchars($cat['image']) ?>" alt="<?= htmlspecialchars($cat['nom_categorie']) ?>">
+              <div class="card" onclick="window.location.href='?id_categorie=<?= $cat['id_categorie'] ?>#livres'">
                 <h3><?= htmlspecialchars($cat['nom_categorie']) ?></h3>
+                <?php if ($cat['image']): ?>
+                  <img src="<?= htmlspecialchars($cat['image']) ?>" alt="Image catégorie" width="150">
+                <?php endif; ?>
               </div>
             <?php endforeach; ?>
           </div>
         </section>
+
+        
+        
+        <div class="livre-grid" id="livres">
+        <?php if (!empty($livres)): ?>
+            <h2>Livres dans la catégorie «
+              <?= htmlspecialchars($categories[array_search($_GET['id_categorie'], array_column($categories, 'id_categorie'))]['nom_categorie']) ?>
+              »
+            </h2>
+            <div class="livre-card">
+              <?php foreach ($livres as $livre): ?>
+                <div class="livre-items">
+                  <strong><?= htmlspecialchars($livre['titre']) ?></strong><br>
+                  Auteur : <?= htmlspecialchars($livre['auteur']) ?><br>
+                  Éditeur : <?= htmlspecialchars($livre['editeur']) ?><br>
+                  Année : <?= htmlspecialchars($livre['annee']) ?>
+                </div>
+              <?php endforeach; ?>
+            </div>
+            <?php endif; ?>
+          </div>
       </div>
 
 
     </div>
-  </div>
- 
 
-  <?php include '../includes/footer.php'; ?>
 
-  <script src="./resources/js/menu.js"></script>
+
+
+    <style>
+      .categorie-card {
+        display: inline-block;
+        border: 1px solid #ccc;
+        margin: 10px;
+        padding: 20px;
+        cursor: pointer;
+        text-align: center;
+        width: 200px;
+      }
+
+      .livre-grid {
+        display: flex;
+        flex-direction: column;
+        /* grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); */
+        background-color: #1f2937;
+        gap: 50px;
+        border-radius: 12px;
+        padding: 20px;
+        max-width: 1200px;
+        margin: 30px auto;
+      }
+
+
+      .livre-card {
+        border-radius: 12px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        cursor: pointer;
+      }
+
+      .livre-items {
+        border: 1px solid #ccc;
+        margin: 5px;
+        padding: 10px;
+        box-shadow: 0 4px 8px #1f2937;
+        text-align: left;
+      }
+
+      .livre-items strong {
+        margin: 0;
+        font-size: 22px;
+      }
+
+    </style>
+
+
+
+
+    <?php include '../includes/footer.php'; ?>
+
+    <script src="./resources/js/menu.js"></script>
 </body>
 
 </html>
