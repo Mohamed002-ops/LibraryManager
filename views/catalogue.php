@@ -118,10 +118,10 @@ if (isset($_GET['id_categorie'])) {
           </div>
         </section>
 
-        
-        
+
+
         <div class="livre-grid" id="livres">
-        <?php if (!empty($livres)): ?>
+          <?php if (!empty($livres)): ?>
             <h2>Livres dans la catégorie «
               <?= htmlspecialchars($categories[array_search($_GET['id_categorie'], array_column($categories, 'id_categorie'))]['nom_categorie']) ?>
               »
@@ -130,14 +130,21 @@ if (isset($_GET['id_categorie'])) {
               <?php foreach ($livres as $livre): ?>
                 <div class="livre-items">
                   <strong><?= htmlspecialchars($livre['titre']) ?></strong><br>
-                  Auteur : <?= htmlspecialchars($livre['auteur']) ?><br>
-                  Éditeur : <?= htmlspecialchars($livre['editeur']) ?><br>
-                  Année : <?= htmlspecialchars($livre['annee']) ?>
+                  Auteur : <b><?= htmlspecialchars($livre['auteur']) ?></b><br>
+                    Éditeur : <b><?= htmlspecialchars($livre['editeur']) ?></b><br>
+                      Année : <b><?= htmlspecialchars($livre['annee']) ?></b><br>
+                        Quantité disponible : <b><?= htmlspecialchars($livre['quantite_total']) ?></b><br><br>
+                        <form action="../controllers/emprunter.php" method="POST">
+                          <input type="hidden" name="id_livre" value="<?= $livre['id_livre'] ?>">
+                          <button type="submit" <?= $livre['quantite_total'] <= 0 ? 'disabled' : '' ?>
+                            class="emprunt-submit">📚 Emprunter</button>
+                          </form>
+                          <?= $livre['quantite_total'] <= 0 ? '<i style="color: red; font-size: 10px;">Non disponible</i>' : '' ?>
                 </div>
               <?php endforeach; ?>
             </div>
-            <?php endif; ?>
-          </div>
+          <?php endif; ?>
+        </div>
       </div>
 
 
@@ -160,7 +167,6 @@ if (isset($_GET['id_categorie'])) {
       .livre-grid {
         display: flex;
         flex-direction: column;
-        /* grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); */
         background-color: #1f2937;
         gap: 50px;
         border-radius: 12px;
@@ -173,14 +179,20 @@ if (isset($_GET['id_categorie'])) {
       .livre-card {
         border-radius: 12px;
         overflow: hidden;
-        display: flex;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
         flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-arround;
         align-items: center;
         transition: transform 0.3s ease, box-shadow 0.3s ease;
         cursor: pointer;
       }
 
       .livre-items {
+        /* width: 250px; */
+        height: 260px;
         border: 1px solid #ccc;
         margin: 5px;
         padding: 10px;
@@ -193,6 +205,19 @@ if (isset($_GET['id_categorie'])) {
         font-size: 22px;
       }
 
+      .livre-items b{
+        color:rgb(95, 143, 255);
+      }
+
+      .emprunt-submit {
+        background-color: #2563eb;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
     </style>
 
 
