@@ -19,6 +19,22 @@ CREATE TABLE usagers (
     numero_carte VARCHAR(50) NOT NULL UNIQUE
 );
 
+
+CREATE TABLE photos_usagers (
+  id_photo INT AUTO_INCREMENT PRIMARY KEY,
+  id_usager INT NOT NULL,
+  photo_profil LONGBLOB,
+  FOREIGN KEY (id_usager) REFERENCES usagers(id_usager) ON DELETE CASCADE
+);
+
+INSERT INTO photos_usagers (id_usager, photo_profil)
+SELECT id_usager, photo_profil FROM usagers WHERE photo_profil IS NOT NULL;
+
+
+
+ALTER TABLE usagers DROP COLUMN photo_profil;
+
+
 CREATE TABLE emprunts (
     id_emprunt INT AUTO_INCREMENT PRIMARY KEY,
     id_usager INT NOT NULL,

@@ -14,7 +14,7 @@ if (isset($_POST['login'])) {
         $user = $stmt->fetch();
 
         if ($password === $user['numero_carte']) {
-            $stmtPhoto = $pdo->prepare("SELECT photo_profil FROM usagers WHERE id_usager = ?");
+            $stmtPhoto = $pdo->prepare("SELECT photo_profil FROM photos_usagers WHERE id_usager = ?");
             $stmtPhoto->execute([$user['id_usager']]);
             $photo = $stmtPhoto->fetchColumn();
 
