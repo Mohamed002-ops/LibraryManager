@@ -1,46 +1,55 @@
 <?php
 session_start();
-require_once '../config/database.php'; // Assure-toi que $pdo est bien initialisé ici
+
+$pdo = new PDO('mysql:host=localhost;dbname=bibliotheque;charset=utf8', 'root', '');
+$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $prenom = $_POST['prenom'] ?? '';
-    $nom = $_POST['nom'] ?? '';
-    $email = $_POST['email'] ?? '';
+    $prenom = trim($_POST['prenom'] ?? '');
+    $nom = trim($_POST['nom'] ?? '');
+    $email = trim($_POST['email'] ?? '');
     $userId = $_SESSION['user']['id_usager'];
 
-    // Gérer le téléchargement de la nouvelle photo
-    $photo_url = $_SESSION['user']['photo_url'] ?? '/LibraryManager/resources/images/default-avatar.png';
-    if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
-        $uploadDir = '../uploads/';
-        if (!is_dir($uploadDir)) {
-            mkdir($uploadDir, 0755, true);
-        }
-
-        $extension = pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION);
-        $filename = 'photo_user_' . $userId . '.' . $extension;
-        $destination = $uploadDir . $filename;
-
-        if (move_uploaded_file($_FILES['photo']['tmp_name'], $destination)) {
-            $photo_url = $destination;
-        }
-    }
-
     try {
-        $sql = "UPDATE usagers SET prenom = :prenom, nom = :nom, email = :email, photo_url = :photo_url WHERE id_usager = :id";
+        // Mise à jour des infos de l’usager
+        $sql = "UPDATE usagers SET prenom = :prenom, nom = :nom, email = :email WHERE id_usager = :id";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([
             ':prenom' => $prenom,
             ':nom' => $nom,
             ':email' => $email,
-            ':photo_url' => $photo_url,
             ':id' => $userId
         ]);
 
-        // Mettre à jour la session
+        // Mise à jour ou insertion de la photo si envoyée
+        if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
+            $imageData = file_get_contents($_FILES['photo']['tmp_name']);
+
+            // Vérifie si une photo existe déjà
+            $checkStmt = $pdo->prepare("SELECT id_photo FROM photos_usagers WHERE id_usager = :id");
+            $checkStmt->execute([':id' => $userId]);
+
+            if ($checkStmt->rowCount() > 0) {
+                // Mise à jour
+                $updatePhoto = $pdo->prepare("UPDATE photos_usagers SET photo_profil = :photo WHERE id_usager = :id");
+                $updatePhoto->execute([
+                    ':photo' => $imageData,
+                    ':id' => $userId
+                ]);
+            } else {
+                // Insertion
+                $insertPhoto = $pdo->prepare("INSERT INTO photos_usagers (id_usager, photo_profil) VALUES (:id, :photo)");
+                $insertPhoto->execute([
+                    ':id' => $userId,
+                    ':photo' => $imageData
+                ]);
+            }
+        }
+
+        // Mise à jour de la session
         $_SESSION['user']['prenom'] = $prenom;
         $_SESSION['user']['nom'] = $nom;
         $_SESSION['user']['email'] = $email;
-        $_SESSION['user']['photo_url'] = $photo_url;
 
         $_SESSION['success'] = "Profil mis à jour avec succès.";
     } catch (PDOException $e) {
