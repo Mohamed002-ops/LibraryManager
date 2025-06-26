@@ -1,5 +1,6 @@
 -- Utiliser la base
 USE bibliotheque;
+USE bib;
 
 -- 🔹 Livres
 INSERT INTO livres (titre, auteur, editeur, annee, isbn, quantite_total) VALUES

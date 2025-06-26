@@ -1,7 +1,7 @@
 <?php
+// session_start();
 $page = basename($_SERVER['PHP_SELF'], '.php'); // 'index', 'library', etc.
 ?>
-
 
 <nav class="navbar">
     <div class="container">
@@ -17,66 +17,232 @@ $page = basename($_SERVER['PHP_SELF'], '.php'); // 'index', 'library', etc.
                     </svg>
                 </button>
             </div>
+            <div class="logo">
+
+                <img src="/Library/resources/images/visitBook.png" alt="Your Company">
+                LibraryManager
+            </div>
             <div class="logo-and-links">
-                <!-- <img class="losgo" src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500" alt="Your Company"> -->
                 <div class="nav-links">
-                    <a href="/LibraryManager"
+                    <a href="/Library/index.php"
                         class="nav-link <?php echo ($page === 'index') ? 'active' : ''; ?>">Dashboard</a>
-                    <a href="/LibraryManager/views/catalogue.php"
+                    <a href="/Library/views/catalogue.php"
                         class="nav-link <?php echo ($page === 'catalogue') ? 'active' : ''; ?>">Catalogue</a>
-                    <a href="/LibraryManager/views/about.php"
-                        class="nav-link <?php echo ($page === 'about') ? 'active' : ''; ?>">About Us</a>
+                    <a href="/Library/views/emprunt.php"
+                        class="nav-link <?php echo ($page === 'emprunt') ? 'active' : ''; ?>">Emprunts</a>
+                    <a href="/Library/views/gestion.php"
+                        class="nav-link <?php echo ($page === 'gestion') ? 'active' : ''; ?>">Gestion</a>
+                    <!-- <a href="/Library/views/about.php"
+                        class="nav-link <?php echo ($page === 'about') ? 'active' : ''; ?>">About Us</a> -->
                 </div>
             </div>
-            <div class="profile-section">
 
-                <?php if (isset($_SESSION['user'])): ?>
-
-
-
-                    <button class="notification-button">
-                        <span class="sr-only">View notifications</span>
-                        <svg class="icon" viewBox="0 0 24 24">
-                            <path
-                                d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
-                        </svg>
-                    </button>
-                    <div class="user-menu">
-                        <button id="user-menu-button">
-                            <img class="avatar"
-                                src="<?php echo htmlspecialchars($_SESSION['user']['photo_url'] ?? '/LibraryManager/resources/images/default-avatar.png'); ?>"
-                                alt="photo_profil">
-
-                        </button>
-                        <div class="dropdown hidden" id="user-dropdown">
-                            <a href="/LibraryManager/views/profile-page.php">Your Profile</a>
-                            <a href="#">Settings</a>
-                            <a href="/LibraryManager/controllers/logout.php">Sign out</a>
-                        </div>
-                    </div>
-                    <div class="user-menu">
-                        <button id="user-menu-button" class="user-name-button">
-                            <?php echo "<span class='user-name'>" . htmlspecialchars($_SESSION['user']['prenom'] . ' ' . $_SESSION['user']['nom']) . "</span>"; ?>
-                        </button>
-                        <div class="dropdown hidden" id="user-dropdown">
-                            <a href="#">Profil</a>
-                            <a href="#">Paramètres</a>
-                            <a href="/LibraryManager/controllers/logout.php">Déconnexion</a>
-                        </div>
-                    </div>
-                </div>
-            <?php else: ?>
-                <a href="#login-form" onclick="toggleProfile(); return false;" class="nav-link btn-login">Se connecter</a>
-            <?php endif; ?>
 
         </div>
     </div>
-
-    <!-- Mobile menu -->
-    <div class="hidden" id="mobile-menu">
-        <a href="/LibraryManager" class="nav-link active">Dashboard</a>
-        <a href="/LibraryManager/views/catalogue.php" class="nav-link">Catalogue</a>
-        <a href="/LibraryManager/views/about.php" class="nav-link">About Us</a>
-    </div>
 </nav>
 
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const toggleButton = document.getElementById('menu-toggle');
+        const menu = document.getElementById('mobile-menu');
+        const iconOpen = document.getElementById('menu-icon-open');
+        const iconClose = document.getElementById('menu-icon-close');
+
+        toggleButton.addEventListener('click', () => {
+            // const isHidden = menu.classList.contains('hidden');
+            menu.classList.toggle('mobile-menu');
+            iconOpen.classList.toggle('hidden');
+            iconClose.classList.toggle('hidden');
+        });
+
+        const userMenuButton = document.getElementById('user-menu-button');
+        const userDropdown = document.getElementById('user-dropdown');
+
+        userMenuButton.addEventListener('click', () => {
+            userDropdown.classList.toggle('hidden');
+        });
+    });
+
+</script>
+
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+* {
+    font-family: poppins;
+}
+    .navbar {
+        background-color: #1f2937;
+    }
+
+    .container {
+        transition: 0.3s ease-in-out, color 0.3s;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1rem;
+    }
+
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 64px;
+        position: relative;
+    }
+
+
+
+    .mobile-menu-button button {
+        background: none;
+        border: none;
+        color: #ccc;
+        padding: 0.5rem;
+    }
+
+    .logo {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        font-size: 26px;
+        color: #fff;
+        text-shadow: 0 0 8px white;
+    }
+
+    .nav-links {
+        display: flex;
+        gap: 1rem;
+        margin-left: 1rem;
+    }
+
+    .nav-link {
+        text-decoration: none;
+        color: #d1d5db;
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+    }
+
+    .options{
+        display: flex;
+        justify-content: space-around
+    }
+
+    .nav-link:hover {
+        background-color: #374151;
+        color: white;
+    }
+
+    .nav-link.active {
+        background-color: #111827;
+        color: white;
+    }
+
+
+    .active-submenu{
+        color: #111827;
+        background-color: white;
+    }
+
+    .profile-section {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .notification-button {
+        background: none;
+        border: none;
+        color: #ccc;
+    }
+
+    .icon {
+        width: 24px;
+        height: 24px;
+        stroke: currentColor;
+        fill: none;
+        padding: 10px;
+        stroke-width: 1.5;
+    }
+
+    .icon:hover {
+        background-color: #374151;
+        color: white;
+        border-radius: 20%;
+    }
+
+    .mobile-menu-button {
+        display: none;
+    }
+
+    .avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 9999px;
+        border: 2px solid white;
+    }
+
+    .user-menu {
+        position: relative;
+    }
+
+    #user-menu-button {
+        background: none;
+        border: none;
+        color: #ccc;
+    }
+
+    .dropdown {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        z-index: 9999;
+        background: white;
+        color: black;
+        padding: 0.5rem 0;
+        border-radius: 6px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        min-width: 150px;
+    }
+
+    .dropdown a {
+        padding: 0.5rem 1rem;
+        text-decoration: none;
+        color: #333;
+    }
+
+    .dropdown a:hover {
+        background-color: #f3f4f6;
+    }
+
+    .mobile-menu {
+        display: none;
+        flex-direction: column;
+        gap: 0.5rem;
+        background-color: #1f2937;
+        padding: 1rem;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    .visible {
+        display: block;
+    }
+
+    .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+    }
+</style>

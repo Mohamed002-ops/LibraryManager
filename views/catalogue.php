@@ -1,17 +1,15 @@
 <?php
-include '../controllers/config.php';
+$pdo = new PDO('mysql:host=localhost;dbname=bib;charset=utf8', 'root', '');
+$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
 
 $query = $pdo->query("SELECT * FROM categories");
 $categories = $query->fetchAll(PDO::FETCH_ASSOC);
-?>
 
 
 
-<?php
-$pdo = new PDO('mysql:host=localhost;dbname=bibliotheque;charset=utf8', 'root', '');
-$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-// Récupérer toutes les catégories
+// Récupérer toutes les catégories3
 $categories = $pdo->query("SELECT * FROM categories")->fetchAll(PDO::FETCH_ASSOC);
 
 // Récupérer les livres si une catégorie est sélectionnée
@@ -78,6 +76,7 @@ if (isset($_GET['id_categorie'])) {
     .card img {
       width: 100%;
       height: 260px;
+      border-top: 1px solid #111827;
       /* object-fit: cover; */
     }
 
@@ -131,15 +130,10 @@ if (isset($_GET['id_categorie'])) {
                 <div class="livre-items">
                   <strong><?= htmlspecialchars($livre['titre']) ?></strong><br>
                   Auteur : <b><?= htmlspecialchars($livre['auteur']) ?></b><br>
-                    Éditeur : <b><?= htmlspecialchars($livre['editeur']) ?></b><br>
-                      Année : <b><?= htmlspecialchars($livre['annee']) ?></b><br>
-                        Quantité disponible : <b><?= htmlspecialchars($livre['quantite_total']) ?></b><br><br>
-                        <form action="../controllers/emprunter.php" method="POST">
-                          <input type="hidden" name="id_livre" value="<?= $livre['id_livre'] ?>">
-                          <button type="submit" <?= $livre['quantite_total'] <= 0 ? 'disabled' : '' ?>
-                            class="emprunt-submit">📚 Emprunter</button>
-                          </form>
-                          <?= $livre['quantite_total'] <= 0 ? '<i style="color: red; font-size: 10px;">Non disponible</i>' : '' ?>
+                  Éditeur : <b><?= htmlspecialchars($livre['editeur']) ?></b><br>
+                  Année : <b><?= htmlspecialchars($livre['annee']) ?></b><br>
+                  Quantité disponible : <b><?= htmlspecialchars($livre['quantite_total']) ?></b><br><br>
+                  <?= $livre['quantite_total'] <= 0 ? '<i style="color: red; font-size: 16px;">Non disponible</i>' : '' ?>
                 </div>
               <?php endforeach; ?>
             </div>
@@ -149,9 +143,6 @@ if (isset($_GET['id_categorie'])) {
 
 
     </div>
-
-
-
 
     <style>
       .categorie-card {
@@ -180,21 +171,22 @@ if (isset($_GET['id_categorie'])) {
         border-radius: 12px;
         overflow: hidden;
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         gap: 20px;
-        flex-direction: row;
+        /* flex-direction: row;
         flex-wrap: wrap;
         justify-content: space-arround;
-        align-items: center;
+        align-items: center; */
         transition: transform 0.3s ease, box-shadow 0.3s ease;
         cursor: pointer;
       }
 
       .livre-items {
         /* width: 250px; */
-        height: 260px;
+        /* height: 260px; */
         border: 1px solid #ccc;
         margin: 5px;
+        border-radius: 12px;
         padding: 10px;
         box-shadow: 0 4px 8px #1f2937;
         text-align: left;
@@ -202,22 +194,16 @@ if (isset($_GET['id_categorie'])) {
 
       .livre-items strong {
         margin: 0;
+        width: 300px;
         font-size: 22px;
+        color: rgb(37, 235, 47);
+        /* background-color: white; */
       }
 
-      .livre-items b{
-        color:rgb(95, 143, 255);
+      .livre-items b {
+        color: rgb(95, 143, 255);
       }
 
-      .emprunt-submit {
-        background-color: #2563eb;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-      }
     </style>
 
 

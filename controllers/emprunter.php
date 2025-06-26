@@ -1,14 +1,7 @@
 <?php
-session_start();
 
-// Vérifier si l'utilisateur est connecté
-if (!isset($_SESSION['user']) || !isset($_SESSION['user']['id_usager'])) {
-    $_SESSION['errors'][] = "Veuillez vous connecter pour emprunter un livre.";
-    header("Location: ../index.php#login-form"); // Redirige vers la page de connexion
-    exit;
-}
 
-$pdo = new PDO('mysql:host=localhost;dbname=bibliotheque;charset=utf8', 'root', '');
+$pdo = new PDO('mysql:host=localhost;dbname=bib;charset=utf8', 'root', '');
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_livre'])) {

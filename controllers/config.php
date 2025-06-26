@@ -1,6 +1,6 @@
 <?php
 $host = 'localhost';
-$dbname = 'bibliotheque';
+$dbname = 'bib';
 $user = 'root';
 $pass = '';
 

@@ -47,10 +47,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
             border-radius: 6px;
         }
 
-        /* .user-name:hover {
+        .user-name:hover {
             background-color: #374151;
             color: white;
-        } */
+        }
     </style>
 </head>
 

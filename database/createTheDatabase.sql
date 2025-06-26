@@ -1,5 +1,5 @@
-CREATE DATABASE bibliotheque;
-USE bibliotheque;
+CREATE DATABASE bib;
+USE bib;
 
 CREATE TABLE livres (
     id_livre INT PRIMARY KEY AUTO_INCREMENT,
@@ -15,8 +15,7 @@ CREATE TABLE usagers (
     id_usager INT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(100) NOT NULL,
     prenom VARCHAR(100) NOT NULL,
-    email VARCHAR(150) NOT NULL UNIQUE,
-    numero_carte VARCHAR(50) NOT NULL UNIQUE
+    telephone VARCHAR(15) UNIQUE
 );
 
 
@@ -71,8 +70,12 @@ ALTER TABLE categories ADD image VARCHAR(255);
 UPDATE categories SET image = 'https://images.unsplash.com/photo-1553729459-efe14ef6055d' WHERE nom_categorie = 'Science-Fiction';
 UPDATE categories SET image = 'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f' WHERE nom_categorie = 'Littérature classique';
 UPDATE categories SET image = 'https://images.unsplash.com/photo-1509021436665-8f07dbf5bf1d' WHERE nom_categorie = 'Philosophie';
-UPDATE categories SET image = 'https://images.unsplash.com/photo-1496104679561-38b9ef542a42' WHERE nom_categorie = 'Romans contemporains';
+UPDATE categories SET image = '\Library\resources\images\livre-contemporains.jpeg' WHERE nom_categorie = 'Romans contemporains';
 UPDATE categories SET image = 'https://images.unsplash.com/photo-1604021743015-04ba763fda3d' WHERE nom_categorie = 'Jeunesse';
 UPDATE categories SET image = 'https://images.unsplash.com/photo-1604079627613-9b94d3c92a0d' WHERE nom_categorie = 'Fantastique';
 UPDATE categories SET image = 'https://images.unsplash.com/photo-1596495577886-d920f1fb7238' WHERE nom_categorie = 'Histoire';
 UPDATE categories SET image = 'https://images.unsplash.com/photo-1603791440384-56cd371ee9a7' WHERE nom_categorie = 'Biographie';
+
+
+
+SELECT * FROM livres WHERE quantite_total >0;

@@ -21,7 +21,7 @@ $isLogin = $form === 'login';
 
     <div class="container">
       <div class="header">
-        <h2 class="title">Bienvenu dans votre Library</h2>
+        <h2 class="title">Bienvenue dans votre Library</h2>
         <p class="subtitle">
           Simplifiez la gestion de votre bibliothèque grâce à
           notre plateforme moderne et intuitive.
@@ -30,7 +30,7 @@ $isLogin = $form === 'login';
           bien plus encore, le tout depuis une seule interface.
         </p>
 
-        <a href="#catalogue" class="cta-button">Explorer le Catalogue</a>
+        <a href="#catalogue" class="cta-button" onclick="window.location.href='./views/catalogue.php'">Explorer le Catalogue</a>
       </div>
 
       <div class="stats">
@@ -95,66 +95,13 @@ $isLogin = $form === 'login';
             ?>
           </span>
         </div>
-        <!-- <div class="stat-item">
-          <span class="dt">Paid time off</span>
-          <span class="dd">Unlimited</span>
-        </div> -->
       </div>
     </div>
   </div>
 
-  <section class="auth-section" id="auth">
-    <div class="auth-container">
-      <!-- Formulaire de Connexion -->
-      <div id="login-form" style="<?= $isLogin ? '' : 'display: none;' ?>">
-        <h2>Se connecter</h2>
-        <form action="./controllers/login.php" method="POST">
-          <div class="form-group">
-            <label for="email_login">Email</label>
-            <input type="email" name="email" id="email_login" required>
-          </div>
-          <div class="form-group">
-            <label for="password_login">Mot de passe</label>
-            <input type="password" name="password" id="password_login" required>
-          </div>
-          <button type="submit" name="login">Connexion</button>
-        </form>
-        <p class="toggle-text">Pas encore de compte ?
-          <a href="?form=register#auth">Créer un compte</a>
-        </p>
-      </div>
-
-      <!-- Formulaire d'inscription -->
-      <div id="register-form" style="<?= !$isLogin ? '' : 'display: none;' ?>">
-        <h2>Créer un compte</h2>
-        <form action="./controllers/register.php" method="POST">
-          <div class="form-group">
-            <label for="nom">Nom</label>
-            <input type="text" name="nom" id="nom" required>
-          </div>
-          <div class="form-group">
-            <label for="nom">Prenom</label>
-            <input type="text" name="prenom" id="prenom" required>
-          </div>
-          <div class="form-group">
-            <label for="email_register">Email</label>
-            <input type="email" name="email" id="email_register" required>
-          </div>
-          <div class="form-group">
-            <label for="password_register">Mot de passe</label>
-            <input type="password" name="password" id="password_register" required>
-          </div>
-          <button type="submit">S'inscrire</button>
-        </form>
-        <p class="toggle-text">Déjà un compte ?
-          <a href="?form=login#auth">Se connecter</a>
-        </p>
-      </div>
-    </div>
-  </section>
-
 
   <style>
+
     html {
       scroll-behavior: smooth;
     }
@@ -236,19 +183,3 @@ $isLogin = $form === 'login';
 </body>
 
 </html>
-
-<script>
-  function toggleForm() {
-    const loginForm = document.getElementById('login-form');
-    const registerForm = document.getElementById('register-form');
-
-    // Toggle visibility
-    if (loginForm.style.display === 'none') {
-      loginForm.style.display = 'block';
-      registerForm.style.display = 'none';
-    } else {
-      loginForm.style.display = 'none';
-      registerForm.style.display = 'block';
-    }
-  }
-</script>
