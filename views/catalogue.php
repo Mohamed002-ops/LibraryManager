@@ -144,74 +144,75 @@ if (isset($_GET['id_categorie'])) {
 
     </div>
 
-    <style>
-      .categorie-card {
-        display: inline-block;
-        border: 1px solid #ccc;
-        margin: 10px;
-        padding: 20px;
-        cursor: pointer;
-        text-align: center;
-        width: 200px;
-      }
+  </div>
 
-      .livre-grid {
-        display: flex;
-        flex-direction: column;
-        background-color: #1f2937;
-        gap: 50px;
-        border-radius: 12px;
-        padding: 20px;
-        max-width: 1200px;
-        margin: 30px auto;
-      }
+  <style>
+    .categorie-card {
+      display: inline-block;
+      border: 1px solid #ccc;
+      margin: 10px;
+      padding: 20px;
+      cursor: pointer;
+      text-align: center;
+      width: 200px;
+    }
+
+    .livre-grid {
+      display: flex;
+      flex-direction: column;
+      background-color: #1f2937;
+      gap: 50px;
+      border-radius: 12px;
+      padding: 20px;
+      max-width: 1200px;
+      margin: 30px auto;
+    }
 
 
-      .livre-card {
-        border-radius: 12px;
-        overflow: hidden;
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 20px;
-        /* flex-direction: row;
+    .livre-card {
+      border-radius: 12px;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      /* flex-direction: row;
         flex-wrap: wrap;
         justify-content: space-arround;
         align-items: center; */
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        cursor: pointer;
-      }
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+    }
 
-      .livre-items {
-        /* width: 250px; */
-        /* height: 260px; */
-        border: 1px solid #ccc;
-        margin: 5px;
-        border-radius: 12px;
-        padding: 10px;
-        box-shadow: 0 4px 8px #1f2937;
-        text-align: left;
-      }
+    .livre-items {
+      /* width: 250px; */
+      /* height: 260px; */
+      border: 1px solid #ccc;
+      margin: 5px;
+      border-radius: 12px;
+      padding: 10px;
+      box-shadow: 0 4px 8px #1f2937;
+      text-align: left;
+    }
 
-      .livre-items strong {
-        margin: 0;
-        width: 300px;
-        font-size: 22px;
-        color: rgb(37, 235, 47);
-        /* background-color: white; */
-      }
+    .livre-items strong {
+      margin: 0;
+      width: 300px;
+      font-size: 22px;
+      color: rgb(37, 235, 47);
+      /* background-color: white; */
+    }
 
-      .livre-items b {
-        color: rgb(95, 143, 255);
-      }
-
-    </style>
-
+    .livre-items b {
+      color: rgb(95, 143, 255);
+    }
+  </style>
 
 
 
-    <?php include '../includes/footer.php'; ?>
 
-    <script src="./resources/js/menu.js"></script>
+  <?php include '../includes/footer.php'; ?>
+
+  <script src="./resources/js/menu.js"></script>
 </body>
 
 </html>

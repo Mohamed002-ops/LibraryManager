@@ -6,6 +6,10 @@ $pdo->exec("UPDATE emprunts
              SET statut = 'en_retard'
              WHERE statut = 'en_cours'
                AND date_retour < CURDATE()");
+// $pdo->exec("UPDATE emprunts
+//              SET statut = 'en_cours'
+//              WHERE statut = 'en_retard'
+//                AND date_retour > CURDATE()");
 
 
 // On suppose que la table emprunts a les colonnes id_emprunt, id_livre, id_utilisateur, date_emprunt, date_retour, statut
@@ -134,7 +138,7 @@ $emprunts = $query->fetchAll(PDO::FETCH_ASSOC);
         <a href="#" id="filter-all">Tous les Emprunts</a>
         <a href="#" id="filter-current">Emprunt en cours</a>
         <a href="#" id="filter-available">Emprunt retourne</a>
-        <a href="#" id="filter-available">Emprunt en retard</a>
+        <a href="#" id="filter-later">Emprunt en retard</a>
       </div>
     </div>
 
@@ -202,6 +206,11 @@ $emprunts = $query->fetchAll(PDO::FETCH_ASSOC);
     document.getElementById('filter-current').addEventListener('click', e => {
       e.preventDefault();
       filterRows('en_cours');
+    });
+
+    document.getElementById('filter-later').addEventListener('click', e => {
+      e.preventDefault();
+      filterRows('en_retard');
     });
 
     // Pour "Livres disponibles" tu dois soit :

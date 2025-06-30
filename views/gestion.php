@@ -29,7 +29,7 @@ $query = $pdo->query(
        FROM emprunts e
        JOIN livres l ON e.id_livre = l.id_livre
        JOIN usagers u ON e.id_usager = u.id_usager
-       WHERE e.statut =  'en_cours'
+       WHERE e.statut =  'en_cours' OR e.statut =  'en_retard' 
        ORDER BY e.date_emprunt DESC"
 );
 $emprunts = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -50,7 +50,7 @@ $livres = $query_livres->fetchAll();
 ?>
 
 <?php
-$form = $_GET['form'] ?? 'add-user'; // 'add-user' par défaut
+$form = $_GET['form'] ?? 'list-book'; // 'add-user' par défaut
 ?>
 
 
@@ -94,10 +94,6 @@ $form = $_GET['form'] ?? 'add-user'; // 'add-user' par défaut
     <?php endif; ?>
 
 
-    <?php
-    $form = $_GET['form'] ?? 'login'; // login par défaut
-    $isLogin = $form === 'login';
-    ?>
 
 
     <div class="section">
@@ -105,11 +101,7 @@ $form = $_GET['form'] ?? 'add-user'; // 'add-user' par défaut
 
         <div class="logo-and-links">
             <div class="nav-links options">
-                <a href="/Library/views/gestion.php?form=add-user" style="border:1px solid #d1d5db"
-                    class="nav-link <?php echo ($form === 'add-user') ? 'active-submenu' : ''; ?>">Ajouter un
-                    Utilisateur</a>
-                <a href="/Library/views/gestion.php?form=add-book" style="border:1px solid #d1d5db"
-                    class="nav-link <?php echo ($form === 'add-book') ? 'active-submenu' : ''; ?>">Ajouter un Livre</a>
+
 
                 <a href="/Library/views/gestion.php?form=list-book" style="border:1px solid #d1d5db"
                     class="nav-link <?php echo ($form === 'list-book') ? 'active-submenu' : ''; ?>">Lister les
@@ -117,12 +109,17 @@ $form = $_GET['form'] ?? 'add-user'; // 'add-user' par défaut
                 <a href="/Library/views/gestion.php?form=list-user" style="border:1px solid #d1d5db"
                     class="nav-link <?php echo ($form === 'list-user') ? 'active-submenu' : ''; ?>">Lister les
                     Utilisateurs</a>
-                <a href="/Library/views/gestion.php?form=register-borrow" style="border:1px solid #d1d5db"
-                    class="nav-link <?php echo ($form === 'register-borrow') ? 'active-submenu' : ''; ?>">Enregistrer un
-                    emprunt</a>
                 <a href="/Library/views/gestion.php?form=list-borrow" style="border:1px solid #d1d5db"
                     class="nav-link <?php echo ($form === 'list-borrow') ? 'active-submenu' : ''; ?>">Lister les
                     emprunts</a>
+                <a href="/Library/views/gestion.php?form=add-user" style="border:1px solid #d1d5db"
+                    class="nav-link <?php echo ($form === 'add-user') ? 'active-submenu' : ''; ?>">Ajouter un
+                    Utilisateur</a>
+                <a href="/Library/views/gestion.php?form=add-book" style="border:1px solid #d1d5db"
+                    class="nav-link <?php echo ($form === 'add-book') ? 'active-submenu' : ''; ?>">Ajouter un Livre</a>
+                <a href="/Library/views/gestion.php?form=register-borrow" style="border:1px solid #d1d5db"
+                    class="nav-link <?php echo ($form === 'register-borrow') ? 'active-submenu' : ''; ?>">Enregistrer un
+                    emprunt</a>
             </div>
         </div>
 
@@ -185,73 +182,15 @@ $form = $_GET['form'] ?? 'add-user'; // 'add-user' par défaut
 
 
                 <!-- Liste des livres -->
-                <div class="auth-container section" style="padding: 0;">
-                    <table>
-                        <tr>
-                            <th>Titre</th>
-                            <th>Auteur</th>
-                            <th>Editeur</th>
-                            <th>Annee</th>
-                            <th>ISBN</th>
-                            <th colspan="2">Action</th>
-                        </tr>
-                        <?php if (empty($livres)): ?>
-                            <tr>
-                                <td style="color: red;"><?= "Pas de livre disponible." ?></td>
-                            </tr>
-                        <?php endif ?>
-                        <?php foreach ($livres as $livre): ?>
-                            <tr>
-                                <td><?= htmlspecialchars($livre['titre']) ?></td>
-                                <td><?= htmlspecialchars($livre['auteur']) ?></td>
-                                <td><?= htmlspecialchars($livre['editeur']) ?></td>
-                                <td><?= htmlspecialchars($livre['annee']) ?></td>
-                                <td><?= htmlspecialchars($livre['isbn']) ?></td>
-                                <!-- <td><?= htmlspecialchars($livre['quantite_total']) ?></td> -->
-                                <td>
-                                    <div class="btn-action">
-
-                                        <form action="../controllers/deleteBook.php" method="POST"
-                                            onsubmit="return confirm('Voulez-vous vraiment supprimer ce livre ?');">
-                                            <input type="hidden" name="id_livre" value="<?= $livre['id_livre'] ?>">
-                                            <button type="submit" class="delete-submit">🗑️ Supprimer</button>
-                                        </form>
-                                        <button class="set-submit">
-                                            <a href="gestion.php?form=edit-book&id=<?= $livre['id_livre'] ?>">✏️ Modifier</a>
-                                        </button>
-
-                                    </div>
-
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </table>
-                </div>
+                <?php include "../Livres/listBook.php"; ?>
             <?php elseif ($form === 'list-user'): ?>
                 <!-- Liste des utilisateurs -->
-                <div class="auth-container section">
-                    <table>
-                        <tr>
-                            <th>Prenom</th>
-                            <th>Nom</th>
-                            <th>Email</th>
-                            <th>telephone</th>
-                        </tr>
-                        <?php if (empty($livres)): ?>
-                            <tr>
-                                <td style="color: red;"><?= "Pas de livre disponible." ?></td>
-                            </tr>
-                        <?php endif ?>
-                        <?php foreach ($usagers as $usager): ?>
-                            <tr>
-                                <td><?= htmlspecialchars($usager['prenom']) ?></td>
-                                <td><?= htmlspecialchars($usager['nom']) ?></td>
-                                <td><?= htmlspecialchars($usager['email']) ?></td>
-                                <td><?= htmlspecialchars($usager['telephone']) ?></td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </table>
-                </div>
+                <?php include "../Usagers/listUser.php"; ?>
+
+
+            <?php elseif ($form === 'list-borrow'): ?>
+                <!-- Liste des emprunts -->
+                <?php include "../Emprunts/listBorrow.php" ?>
             <?php elseif ($form === 'register-borrow'): ?>
                 <!-- Enregistrement d’un emprunt -->
                 <div class="nouveau" style="margin: 2%">
@@ -286,7 +225,7 @@ $form = $_GET['form'] ?? 'add-user'; // 'add-user' par défaut
 
 
                 <div class="existant" style="margin: 2%">
-                    <h2>Usager deja Existant</h2>
+                    <h2>Usager Existant</h2>
                     <form action="../controllers/registerBorrow.php" method="POST">
 
                         <!-- Sélection de l'usager -->
@@ -329,40 +268,7 @@ $form = $_GET['form'] ?? 'add-user'; // 'add-user' par défaut
                     </form>
                 </div>
 
-            <?php elseif ($form === 'list-borrow'): ?>
-                <!-- Liste des emprunts -->
-                <div class="auth-container section" style="padding: 0;">
-                    <table>
-                        <tr>
-                            <th>Livre</th>
-                            <th>Emprunteur</th>
-                            <th>Date d'emprunt</th>
-                            <th>Date de retour</th>
-                            <th>Statut</th>
-                            <th>Action</th>
-                        </tr>
-                        <?php if (empty($emprunts)): ?>
-                            <tr>
-                                <td style="color: red;"><?= "Pas de livre empruntés" ?></td>
-                            </tr>
-                        <?php endif ?>
-                        <?php foreach ($emprunts as $emprunt): ?>
-                            <tr>
-                                <td><?= htmlspecialchars($emprunt['titre']) ?></td>
-                                <td><?= htmlspecialchars($emprunt['prenom'] . ' ' . $emprunt['nom']) ?></td>
-                                <td><?= htmlspecialchars($emprunt['date_emprunt']) ?></td>
-                                <td><?= htmlspecialchars($emprunt['date_retour']) ?></td>
-                                <td><?= htmlspecialchars($emprunt['statut']) ?></td>
-                                <td>
-                                    <form action="../controllers/return.php" method="POST">
-                                        <input type="hidden" name="id_livre" value="<?= $emprunt['id_livre'] ?>">
-                                        <button type="submit" class="emprunt-submit">📚 Rendre</button>
-                                    </form>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </table>
-                </div>
+
             <?php endif; ?>
 
         </section>

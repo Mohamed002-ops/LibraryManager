@@ -3,6 +3,8 @@
 $page = basename($_SERVER['PHP_SELF'], '.php'); // 'index', 'library', etc.
 ?>
 
+
+
 <nav class="navbar">
     <div class="container">
         <div class="nav-content">

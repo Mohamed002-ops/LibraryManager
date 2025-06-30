@@ -83,7 +83,7 @@ $isLogin = $form === 'login';
             try {
               include "./controllers/connectToDatabase.php";
               // Requête pour récupérer la somme des quantités
-              $query = $pdo->query("SELECT COUNT(id_emprunt) AS total_emprunt FROM emprunts WHERE statut = 'en_cours'");
+              $query = $pdo->query("SELECT COUNT(id_emprunt) AS total_emprunt FROM emprunts WHERE statut = 'en_cours' OR statut = 'en_retard'");
               $result = $query->fetch();
 
               // Affichage
